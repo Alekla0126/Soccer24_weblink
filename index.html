@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,11 +9,30 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
+            /* Dark theme (default) */
+            --bg-primary: #062c11;
+            --bg-gradient-start: #062c11;
+            --bg-gradient-end: #1a5727;
+            --text-color: #ffffff;
+            --container-bg: rgba(255, 255, 255, 0.1);
+            --container-border: rgba(255, 255, 255, 0.2);
             --primary-color: #05802a;
-            --secondary-color: #32CD32;
-            --accent-color: #f8f8f8;
+            --primary-hover: #046823;
             --text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
             --box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        [data-theme="light"] {
+            --bg-primary: #e8f5e9;
+            --bg-gradient-start: #e8f5e9;
+            --bg-gradient-end: #c8e6c9;
+            --text-color: #1b5e20;
+            --container-bg: rgba(255, 255, 255, 0.8);
+            --container-border: rgba(0, 0, 0, 0.1);
+            --primary-color: #2e7d32;
+            --primary-hover: #1b5e20;
+            --text-shadow: none;
+            --box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
         }
 
         * {
@@ -26,54 +45,73 @@
             margin: 0;
             padding: 0;
             min-height: 100vh;
-            background: linear-gradient(135deg, #05802a, #32CD32);
-            background-image: url('https://www.transparenttextures.com/patterns/soccer.png');
-            background-repeat: repeat;
+            background: linear-gradient(135deg, var(--bg-gradient-start), var(--bg-gradient-end));
+            background-attachment: fixed;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             font-family: 'Montserrat', sans-serif;
-            color: white;
+            color: var(--text-color);
             text-align: center;
             padding: 20px;
             position: relative;
-            overflow: hidden;
+            overflow-x: hidden;
         }
 
-        /* Soccer ball animation */
+        /* Soccer ball background pattern */
         body::before {
             content: '';
             position: absolute;
-            width: 100%;
-            height: 100%;
-            background: url('https://static.vecteezy.com/system/resources/previews/009/665/328/original/football-soccer-ball-clipart-design-illustration-free-png.png') no-repeat;
-            background-size: 200px;
-            opacity: 0.05;
-            animation: rotate 60s linear infinite;
-            top: -50px;
-            left: -50px;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            z-index: -1;
             pointer-events: none;
         }
 
-        @keyframes rotate {
-            0% {
-                transform: rotate(0deg);
-            }
-            100% {
-                transform: rotate(360deg);
-            }
+        .theme-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: var(--container-bg);
+            border: 1px solid var(--container-border);
+            color: var(--text-color);
+            padding: 8px 16px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: var(--box-shadow);
+            z-index: 100;
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            transform: translateY(-2px);
+        }
+
+        .theme-toggle svg {
+            width: 18px;
+            height: 18px;
+            fill: var(--text-color);
         }
 
         .container {
-            background-color: rgba(255, 255, 255, 0.1);
+            background-color: var(--container-bg);
             backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
             padding: 40px;
             border-radius: 20px;
             box-shadow: var(--box-shadow);
             max-width: 800px;
             width: 90%;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border: 1px solid var(--container-border);
             animation: fadeIn 1s ease-out;
             position: relative;
             z-index: 1;
@@ -123,7 +161,7 @@
         }
 
         .button:hover {
-            background-color: #046823;
+            background-color: var(--primary-hover);
             transform: translateY(-5px);
             box-shadow: 0 15px 25px rgba(0, 0, 0, 0.3);
         }
@@ -188,10 +226,23 @@
             .container {
                 padding: 30px 20px;
             }
+            
+            .theme-toggle {
+                top: 10px;
+                right: 10px;
+                padding: 6px 12px;
+                font-size: 0.8rem;
+            }
         }
     </style>
 </head>
 <body>
+    <button class="theme-toggle" onclick="toggleTheme()">
+        <svg id="dark-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 9 9c0-.46-.04-.92-.1-1.36a5.389 5.389 0 0 1-4.4 2.26 5.403 5.403 0 0 1-3.14-9.8c-.44-.06-.9-.1-1.36-.1z"/></svg>
+        <svg id="light-icon" style="display:none;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1zM5.99 4.58a.996.996 0 0 0-1.41 0 .996.996 0 0 0 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41L5.99 4.58zm12.37 12.37a.996.996 0 0 0-1.41 0 .996.996 0 0 0 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0a.996.996 0 0 0 0-1.41l-1.06-1.06zm1.06-10.96a.996.996 0 0 0 0-1.41.996.996 0 0 0-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06zM7.05 18.36a.996.996 0 0 0 0-1.41.996.996 0 0 0-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06z"/></svg>
+        <span id="theme-text">Light Mode</span>
+    </button>
+
     <div class="container">
         <h1>Welcome to Soccer24!</h1>
         <p>Stay connected with live scores, match updates, and the latest football news.
@@ -228,6 +279,41 @@
                 window.location.href = "https://play.google.com/store/apps/details?id=com.alekla0126.soccer24&hl=ru";
             }
         }
+
+        function toggleTheme() {
+            const html = document.documentElement;
+            const isDark = html.getAttribute('data-theme') === 'dark';
+            const newTheme = isDark ? 'light' : 'dark';
+            
+            html.setAttribute('data-theme', newTheme);
+            
+            // Update toggle text and icons
+            document.getElementById('theme-text').textContent = isDark ? 'Dark Mode' : 'Light Mode';
+            document.getElementById('dark-icon').style.display = isDark ? 'none' : 'block';
+            document.getElementById('light-icon').style.display = isDark ? 'block' : 'none';
+            
+            // Save preference to local storage
+            localStorage.setItem('theme', newTheme);
+        }
+        
+        // Check for saved theme preference or respect user's system preference
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme) {
+                document.documentElement.setAttribute('data-theme', savedTheme);
+                
+                // Update toggle display
+                const isDark = savedTheme === 'dark';
+                document.getElementById('theme-text').textContent = isDark ? 'Light Mode' : 'Dark Mode';
+                document.getElementById('dark-icon').style.display = isDark ? 'block' : 'none';
+                document.getElementById('light-icon').style.display = isDark ? 'none' : 'block';
+            } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
+                document.documentElement.setAttribute('data-theme', 'light');
+                document.getElementById('theme-text').textContent = 'Dark Mode';
+                document.getElementById('dark-icon').style.display = 'none';
+                document.getElementById('light-icon').style.display = 'block';
+            }
+        });
     </script>
 </body>
 </html>
